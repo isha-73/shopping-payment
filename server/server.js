@@ -15,7 +15,8 @@ const connection = createConnection({
     host: 'localhost',
     user: 'root',
     password: dbPassword, // your password
-    database: 'paymentdb'
+    database: 'paymentdb',
+    multipleStatements: true
 });
 
 connection.connect((err) => {
@@ -27,14 +28,36 @@ connection.connect((err) => {
 app.post('/pay', (req, res) => {
     const { card_number, expiry_date, cvv, amount, note } = req.body;
 
-    const query = `INSERT INTO payments (card_number, expiry_date, cvv, amount, note)
-                   VALUES ('${card_number}', '${expiry_date}', '${cvv}', '${amount}', '${note}')`;
+    const query = `INSERT INTO payments (user_id, card_number, expiry_date, cvv, amount, note)
+                   VALUES ('1','${card_number}', '${expiry_date}', '${cvv}', '${amount}', '${note}')`;
 
     connection.query(query, (error, results) => {
         if (error) throw error;
         res.send('Payment Done (INSECURE)');
     });
 });
+app.get('/transactions', (req, res) => {
+    const query = 'SELECT amount, note FROM payments where user_id = 1';
+    connection.query(query, (error, results) => {
+        if (error) throw error;
+        res.json(results);
+    });
+});
+app.get('/get-card', (req, res) => {
+    const userId = req.query.user_id;
+
+    // This is INSECURE SQL (vulnerable to injection intentionally)
+    const query = `SELECT DISTINCT card_number, expiry_date, cvv FROM payments WHERE user_id = ${userId} `;
+
+    connection.query(query, (error, results) => {
+        if (error) throw error;
+        res.json(results);
+    });
+        
+   
+});
+
+
 
 // Start HTTP Server
 app.listen(5000, () => {

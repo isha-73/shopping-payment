@@ -7,13 +7,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100%;
 }
 
 .payment-card {
     background: white;
     padding: 30px;
-    width: 400px;
+    width: 500px;
     border-radius: 20px;
     box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -26,7 +26,7 @@ body {
 
 .payment-card input,
 .payment-card textarea {
-    width: 100%;
+    width: 75%;
     padding: 12px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -71,4 +71,20 @@ body {
 
 .button-group .secure:hover {
     background-color: #66bb6a;
+}
+
+.transaction-history {
+    margin-top: 30px;
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.transaction-history ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.transaction-history li {
+    margin-bottom: 10px;
 }

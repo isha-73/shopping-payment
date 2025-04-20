@@ -35,12 +35,27 @@ connection.connect((err) => {
 app.post('/secure-pay', (req, res) => {
     const { card_number, expiry_date, cvv, amount, note } = req.body;
 
-    const query = "INSERT INTO payments (card_number, expiry_date, cvv, amount, note) VALUES (?, ?, ?, ?, ?)";
-    connection.query(query, [card_number, expiry_date, cvv, amount, note], (error, results) => {
+    const query = "INSERT INTO payments (user_id,card_number, expiry_date, cvv, amount, note) VALUES (?, ?, ?, ?, ?,?)";
+    connection.query(query, ['1',card_number, expiry_date, cvv, amount, note], (error, results) => {
         if (error) throw error;
         res.send('Payment Done (SECURE)');
     });
 });
+app.get('/get-card', (req, res) => {
+    const userId = req.query.user_id;
+
+    // Safer query using parameterized inputs
+    const query = `SELECT DISTINCT card_number, expiry_date, cvv FROM payments WHERE user_id = ?`;
+
+    connection.query(query, [userId], (error, results) => {
+        if (error) {
+            console.error('Database error:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+        res.json(results);
+    });
+});
+
 
 // Start HTTPS Server
 createServer(options, app).listen(5001, () => {
