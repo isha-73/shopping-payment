@@ -8,11 +8,11 @@ const Header = ({ cartCount, user }) => {
             <nav style={styles.nav}>
                 <Link to="/cart" style={styles.navLink}>🛒 Cart ({cartCount})</Link>
 
-                {user ? (
+                {/* {user ? (
                     <span style={styles.navLink}>👤 {user}</span> // show username
                 ) : (
                     <Link to="/login" style={styles.navLink}>👤 Sign In</Link> // show Sign In if no user
-                )}
+                )} */}
             </nav>
         </header>
     );
